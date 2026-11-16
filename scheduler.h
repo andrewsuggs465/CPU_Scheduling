@@ -1,3 +1,11 @@
+/*
+ * scheduler.h
+ * COMP 3500 Project 5 - CPU Scheduling
+ * Author: Andrew Suggs (ads0127@auburn.edu)
+ *
+ * Statistics structure and the interface for the simulation mechanism and
+ * the three scheduling policies.
+ */
 #ifndef SCHEDULER_H
 
 #define SCHEDULER_H

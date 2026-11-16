@@ -1,3 +1,13 @@
+/*
+ * scheduler.c
+ * COMP 3500 Project 5 - CPU Scheduling
+ * Author: Andrew Suggs (ads0127@auburn.edu)
+ *
+ * Time-driven scheduling mechanism (run_simulation) and the three
+ * scheduling policies (fcfs, rr, srtf). Each policy only picks an index
+ * into the ready queue; run_simulation does the arrivals, preemption,
+ * dispatch, bookkeeping, and output.
+ */
 #include <stdio.h>
 #include <limits.h>
 #include "scheduler.h"
@@ -61,11 +71,15 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
         }
         /* Dispatch selected policy */
         if (current == NULL && ready_count > 0) {
-            int i;
+            int i = -1;
             switch (args.policy) {
                 case FCFS: i = fcfs(ready, ready_count); break;
                 case RR:   i =   rr(ready, ready_count); break;
                 case SRTF: i = srtf(ready, ready_count); break;
+            }
+            if (i < 0 || i >= ready_count) {
+                fprintf(stderr, "Error in dispatch.\n");
+                return -1;
             }
             current = ready[i];
             remove_at(ready, &ready_count, i);

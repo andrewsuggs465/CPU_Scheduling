@@ -1,3 +1,11 @@
+/*
+ * parser.h
+ * COMP 3500 Project 5 - CPU Scheduling
+ * Author: Andrew Suggs (ads0127@auburn.edu)
+ *
+ * Shared types (struct process, enum scheduling_policy, struct fields) and
+ * the parser interface.
+ */
 #ifndef PARSER_H
 
 #define PARSER_H

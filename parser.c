@@ -1,3 +1,11 @@
+/*
+ * parser.c
+ * COMP 3500 Project 5 - CPU Scheduling
+ * Author: Andrew Suggs (ads0127@auburn.edu)
+ *
+ * Command-line parser and task-file loader. Both functions print an error
+ * message and the usage line (where it helps) and report failure to main().
+ */
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +21,11 @@ struct fields parse_args(int argc, char *argv[]){
     struct fields f = {0};
 
     /* Input sanitization */
-    if (argc > 4) {
+    if (argc == 1) {
+        print_usage();
+        f.success = -1;
+        return f;
+    } else if (argc > 4) {
         fprintf(stderr, "Too many arguments\n");
         print_usage();
         f.success = -1;
@@ -86,7 +98,7 @@ int parse_tasks(const char *file, struct process *tasks, int max_tasks) {
     fp = fopen(file, "r");
 
     if (fp == NULL) {
-        fprintf(stderr, "File does not exist!\n");
+        fprintf(stderr, "Cannot open task file \"%s\"!\n", file);
         return -1;
     }
 
