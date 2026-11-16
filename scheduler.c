@@ -4,6 +4,8 @@
 int run_simulation(struct fields args, struct process *tasks, int num_tasks){
     int finished = 0;
     int ready_count = 0;
+    /* Counts how many times current has run since its last dispatch */
+    int slice_used = 0;
     struct process *ready[num_tasks];
     struct process *current = NULL;
     struct stats s = {0};
@@ -17,18 +19,34 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
             }
         }
         /* Current finished? */
-        if (current != NULL && current->remaining == 0) {
-            printf("<time %d> process %d finished\n", t, current->pid);
-            s.total_turnaround += t - current->arrival;
-            s.total_waiting += turnaround - current->burst;
-            finished++;
-            current = NULL;
+        if (current != NULL) {
+            if (current->remaining == 0) {
+                printf("<time %d> process %d is finished...\n", t, current->pid);
+                slice_used = 0;
+                int turnaround = t - current->arrival;
+                s.total_turnaround += turnaround;
+                int waiting = turnaround - current->burst;
+                s.total_waiting += waiting;
+                finished++;
+                current = NULL;
+            } else if (args.policy == RR ) {
+                slice_used++;
+                if (slice_used == args.quantum) {
+                    slice_used = 0;
+                    ready[ready_count] = current;
+                    current = NULL;
+                    ready_count++;
+                }
+            } else if (args.policy == SRTF) {
+
+            }
         }
+        
         /* All done */
         if (finished == num_tasks) {
-            printf("<time %d> All processess finished\n", t);
+            printf("<time %d> All processes finish ......\n", t);
             s.total_time = t;
-            print_statistics(s, nym_tasks);
+            print_statistics(s, num_tasks);
             break;
         }
         /* Dispatch selected policy */
@@ -43,9 +61,13 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
             remove_at(ready, &ready_count, i);
         }
 
+        /* Simulate running a process */
         if (current != NULL) {
             printf("<time %d> process %d is running\n", t, current->pid);
-            s.total_response += t - current->arrival;
+            if (current->remaining == current->burst) {
+                int response = t - current->arrival;
+                s.total_response += response;
+            }
             current->remaining--;
             s.busy_ticks++;
         } else {
@@ -56,14 +78,20 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
 }
 
 int fcfs (struct process *ready[], int ready_count) {
+    (void)ready;
+    (void)ready_count;
     return 0;
 }
 
 int rr (struct process *ready[], int ready_count) {
+    (void)ready;
+    (void)ready_count;
     return 0;
 }
 
 int srtf (struct process *ready[], int ready_count) {
+    (void)ready;
+    (void)ready_count;
     return 0;
 }
 
