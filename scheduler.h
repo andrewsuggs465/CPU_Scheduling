@@ -4,6 +4,9 @@
 
 #include "parser.h"
 
+// waiting = turnaround - burst
+// response = start - arrival
+// turnaround = completion - arrival
 struct stats {
     int total_waiting;
     int total_response;

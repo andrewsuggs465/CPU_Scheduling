@@ -2,10 +2,6 @@
 
 #define PARSER_H
 
-// waiting = turnaround - burst
-// response = start - arrival
-// turnaround = completion - arrival
-
 /*
 * The structure for each process
 * - pid is a unique numeric process ID

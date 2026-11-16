@@ -36,13 +36,13 @@ struct fields parse_args(int argc, char *argv[]){
         return f;
     }
     if (strcmp(s_parse, "FCFS") == 0) {
-        f.policy = 0;
+        f.policy = FCFS;
     }
     if (strcmp(s_parse, "RR") == 0) {
-        f.policy = 1;
+        f.policy = RR;
     }
     if (strcmp(s_parse, "SRTF") == 0) {
-        f.policy = 2;
+        f.policy = SRTF;
     }
 
     /* If time_quantum is left off for RR */

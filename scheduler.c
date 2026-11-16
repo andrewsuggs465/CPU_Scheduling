@@ -19,6 +19,8 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
         /* Current finished? */
         if (current != NULL && current->remaining == 0) {
             printf("<time %d> process %d finished\n", t, current->pid);
+            s.total_turnaround += t - current->arrival;
+            s.total_waiting += turnaround - current->burst;
             finished++;
             current = NULL;
         }
@@ -43,6 +45,7 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
 
         if (current != NULL) {
             printf("<time %d> process %d is running\n", t, current->pid);
+            s.total_response += t - current->arrival;
             current->remaining--;
             s.busy_ticks++;
         } else {
@@ -57,11 +60,11 @@ int fcfs (struct process *ready[], int ready_count) {
 }
 
 int rr (struct process *ready[], int ready_count) {
-
+    return 0;
 }
 
 int srtf (struct process *ready[], int ready_count) {
-
+    return 0;
 }
 
 void remove_at(struct process *ready[], int *ready_count, int i) {
