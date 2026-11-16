@@ -1,22 +1,35 @@
-#include <stdio.h>
-#include "parser.h"
+#include "scheduler.h"
 
-#define MAX_TASKS 100
+/* Running totals */
+int total_waiting_time = -1;
+int total_response_time = -1;
+int total_turnaround_time = -1;
+int total_cpu_usage = -1;
 
-int main(int argc, char *argv[]) {
-    int num_tasks;
-    struct fields args = parse_args(argc, argv);
-    if (args.success != 0) {
-        fprintf(stderr, "Command failed to parse!");
-        return -1;
-    }
+/* Final averages to be reported */
+int average_waiting_time = -1;
+int average_response_time = -1;
+int average_turnaround_time = -1;
+int overall_cpu_usage = -1;
+
+int run_simulation(struct fields args, struct process *tasks, int num_tasks){
+    struct process *ready[num_tasks];
+    int ready_count = 0;
+
+    for (int t = 0; ; t++) {
+        /* Move tasks that have arrived into ready queue */
+        for (int i = 0; i < num_tasks; i++) {
+            if (tasks[i].arrival == t) {
+                ready[ready_count] = &tasks[i];
+                ready_count++;
     
-    struct process tasks[MAX_TASKS];
-
-    num_tasks = parse_tasks(argv[1], tasks, MAX_TASKS);
-    if (num_tasks == -1) {
-        return -1;
+            }
+        }
+        struct process *current = NULL;
+        if (current.remaining == 0) {
+            
+            current = NULL;
+        }
     }
-
     return 0;
 }
