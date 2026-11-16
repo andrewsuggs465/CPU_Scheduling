@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <limits.h>
 #include "scheduler.h"
 
 int run_simulation(struct fields args, struct process *tasks, int num_tasks){
@@ -38,7 +39,16 @@ int run_simulation(struct fields args, struct process *tasks, int num_tasks){
                     ready_count++;
                 }
             } else if (args.policy == SRTF) {
-
+                int i;
+                i = srtf(ready, ready_count);
+                if (i > -1) {
+                    if (ready[i]->remaining < current->remaining) {
+                        ready[ready_count] = current;
+                        current = NULL;
+                        ready_count++;
+                    }
+                }
+                
             }
         }
         
@@ -90,9 +100,15 @@ int rr (struct process *ready[], int ready_count) {
 }
 
 int srtf (struct process *ready[], int ready_count) {
-    (void)ready;
-    (void)ready_count;
-    return 0;
+    int shortest_remaining = INT_MAX;
+    int pos = -1;
+    for (int i = 0; i < ready_count; i++) {
+        if (ready[i]->remaining < shortest_remaining) {
+            shortest_remaining = ready[i]->remaining;
+            pos = i;
+        }
+    }
+    return pos;
 }
 
 void remove_at(struct process *ready[], int *ready_count, int i) {
